@@ -1,0 +1,36 @@
+int[] data = {1, 3, 36, 2, 19, 25, 100, 17, 7};
+heapify(data);
+
+public static void heapify(int[] data) {
+
+  int end = data.length - 1;
+
+  int start = (end - 1) / 2;
+
+  while (start >= 0) {
+    siftDown(data, start, end - 1);
+    start--;
+  }
+}
+
+public static void siftDown(int[] data, int start, int end) {
+  int root = start;
+
+  while ((2 * root + 1) <= end) {
+    int child = 2 * root + 1;
+
+    if (child + 1 <= end && data[child] < data[child + 1]) {
+      child = child + 1;
+    }
+
+    if (data[root] < data[child]) {
+      int tmp = data[root];
+      data[root] = data[child];
+      data[child] = tmp;
+
+      root = child;
+    } else {
+      return;
+    }
+  }
+}
