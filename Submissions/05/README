@@ -1,0 +1,6 @@
+For this assignment, I worked alone.
+
+I struggled a bit to get my script to work so I had to rewrite it a few times.
+It is much better now but there are two of them so it would be easier to debug.
+
+I did sort the file between the two but that is as simple as using the sort command and redirecting the input into a new file.

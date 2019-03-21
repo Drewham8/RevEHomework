@@ -1,0 +1,26 @@
+Drew Hamilton
+
+Part 2
+
+I worked with nobody
+
+First the program initializes a console object and checks to make sure
+it initialized properly
+
+Then it reads a password input with console.readPassword() again except
+this time the input is being checked against the transform method with
+an input of a character array.
+
+This means that the array is a scrambled version of the password
+
+Looking at the transform method, it makes a copy of the array, makes a second
+array, and then uses ^= to shift the binary code of each of the character
+entries to unscramble it.
+
+Then it returns the unscrambled password and checks your input against it
+
+By making a java program you can use the transform method to unscramble the
+password and find that it is "battery staple"
+
+Thus, when you type battery staple you get "Welcome back!" printed to the screen
+and if you type the incorrect password, you get "Intruder detected!"

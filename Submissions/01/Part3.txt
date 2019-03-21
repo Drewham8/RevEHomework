@@ -1,0 +1,33 @@
+Drew Hamilton
+
+I worked on this with nobody
+
+Part3
+
+Aside from the stuff described in the previous programs
+unrelated to the encoding that happens the same this time:
+
+First the program creates a random number,
+and prints it. Then it converts it to a string
+and then to bytecode. Then it makes the bytecode into a hash encoded in SHA-256
+it then runs this hash through a for loop which initially seems to scramble
+the bytes, until you notice that 0xFF is 00000000 00000000 00000000 11111111 in
+binary and & spits out an answer by copying only the 1's they have in common,
+thus the 0xFF forces every number to fall within 0-255. If the number is
+negative before then it will be the compliment of the number within 256 but positive.
+
+thus since 255 is the highest number, 256*32 (the maximum number) would be 8160
+which still is a 4 digit number
+
+Then it is modded by 10000 (red herring) and converted back into an integer
+which is used as the password which your entry is compared to.
+
+Thus an example would be that 3321 would be the generated integer, which
+would be converted through this process into 4684.
+
+Thus to find the password, convert the number given to a byte array, hash it,
+and then convert it back to a four digit number with a loop that uses the bit
+operator &.
+
+It is not conceptually difficult to follow the steps by hand but it is
+certainly a headache.

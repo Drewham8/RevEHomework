@@ -1,0 +1,12 @@
+Drew Hamilton
+
+I worked with nobody
+
+The program takes an input array of arguments which it does not use and error
+checks to ensure that the console object properly initializes
+
+Then it reads the password through console.readPassword which hides what
+you type and checks it against the set password, "open sesame"
+
+upon inputting the correct password it prints "Welcome back!"
+upon inputting an incorrect password it prints "Intruder detected!"
