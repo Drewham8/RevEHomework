@@ -177,7 +177,7 @@ Disassembly of section .text:
   40074f:	0f b6 32             	movzx  esi,BYTE PTR [rdx]               ;dereferences the string and puts the first character into esi
   400752:	8b 55 f0             	mov    edx,DWORD PTR [rbp-0x10]         
   400755:	48 63 ca             	movsxd rcx,edx                          ;counter in rcx again
-  400758:	48 8b 55 f8          	mov    rdx,QWORD PTR [rbp-0x8]          ;a pointer to the password "29xj73$%e..." in rdx
+  400758:	48 8b 55 f8          	mov    rdx,QWORD PTR [rbp-0x8]          ;a pointer to the password "28xj73$%e..." in rdx
   40075c:	48 01 ca             	add    rdx,rcx                          ;password pointer + counter
   40075f:	0f b6 12             	movzx  edx,BYTE PTR [rdx]               ;puts the first byte of the new pointer into edx
   400762:	31 f2                	xor    edx,esi                          ;performs xor on both of the first bytes 
@@ -188,7 +188,7 @@ Disassembly of section .text:
   400770:	7c c3                	jl     400735 <transform+0x2f>          ;if not at the end jump to the instruction right after the initial jump
   400772:	90                   	nop                                     ;end the function and return
   400773:	c9                   	leave  
-  400774:	c3                   	ret    
+  400774:	c3                   	ret                                     ;appears to xor the user input with the string "28xj..."
 
 0000000000400775 <print_hex>:
   400775:	55                   	push   rbp
@@ -228,7 +228,7 @@ Disassembly of section .text:
   4007e0:	00 00 
   4007e2:	48 89 45 f8          	mov    QWORD PTR [rbp-0x8],rax
   4007e6:	31 c0                	xor    eax,eax                          ;clears eax register
-  4007e8:	c6 45 e0 46          	mov    BYTE PTR [rbp-0x20],0x46         
+  4007e8:	c6 45 e0 46          	mov    BYTE PTR [rbp-0x20],0x46         ;password to ultimately compare with
   4007ec:	c6 45 e1 4a          	mov    BYTE PTR [rbp-0x1f],0x4a
   4007f0:	c6 45 e2 0d          	mov    BYTE PTR [rbp-0x1e],0xd
   4007f4:	c6 45 e3 19          	mov    BYTE PTR [rbp-0x1d],0x19
@@ -251,23 +251,23 @@ Disassembly of section .text:
   40083b:	48 8b 45 d8          	mov    rax,QWORD PTR [rbp-0x28]         
   40083f:	89 d6                	mov    esi,edx                          ;length of user input now in esi
   400841:	48 89 c7             	mov    rdi,rax                          ;pointer to user input now in rdi
-  400844:	e8 bd fe ff ff       	call   400706 <transform>               
-  400849:	8b 45 d4             	mov    eax,DWORD PTR [rbp-0x2c]
+  400844:	e8 bd fe ff ff       	call   400706 <transform>               ;transforms it by xor the user input with "28xj..."
+  400849:	8b 45 d4             	mov    eax,DWORD PTR [rbp-0x2c]         ;places 12 in eax (likely used as the length of the string for memcmp)
   40084c:	48 63 d0             	movsxd rdx,eax
-  40084f:	48 8b 4d d8          	mov    rcx,QWORD PTR [rbp-0x28]
-  400853:	48 8d 45 e0          	lea    rax,[rbp-0x20]
+  40084f:	48 8b 4d d8          	mov    rcx,QWORD PTR [rbp-0x28]         ;user input pointer in rcx
+  400853:	48 8d 45 e0          	lea    rax,[rbp-0x20]                   ;hex data to compare transformed user input to
   400857:	48 89 ce             	mov    rsi,rcx
   40085a:	48 89 c7             	mov    rdi,rax
-  40085d:	e8 7e fd ff ff       	call   4005e0 <memcmp@plt>
-  400862:	85 c0                	test   eax,eax
-  400864:	75 0c                	jne    400872 <main+0xa8>
-  400866:	bf 4e 09 40 00       	mov    edi,0x40094e
+  40085d:	e8 7e fd ff ff       	call   4005e0 <memcmp@plt>              ;compares transformed user input with the hex data
+  400862:	85 c0                	test   eax,eax                          ;sets 0 flag if equal
+  400864:	75 0c                	jne    400872 <main+0xa8>               ;if they arent equal go to line 400872
+  400866:	bf 4e 09 40 00       	mov    edi,0x40094e                     ;sets the input of puts to be pointing at "Welcome Back!"
   40086b:	e8 20 fd ff ff       	call   400590 <puts@plt>
-  400870:	eb 0a                	jmp    40087c <main+0xb2>
-  400872:	bf 5c 09 40 00       	mov    edi,0x40095c
-  400877:	e8 14 fd ff ff       	call   400590 <puts@plt>
+  400870:	eb 0a                	jmp    40087c <main+0xb2>               ;skips placing "Intruder detected!" if already printed "Welcome back"
+  400872:	bf 5c 09 40 00       	mov    edi,0x40095c                     ;sets the input to puts to "Intruder detected!"
+  400877:	e8 14 fd ff ff       	call   400590 <puts@plt>                
   40087c:	b8 00 00 00 00       	mov    eax,0x0
-  400881:	48 8b 4d f8          	mov    rcx,QWORD PTR [rbp-0x8]
+  400881:	48 8b 4d f8          	mov    rcx,QWORD PTR [rbp-0x8]          ;nothing after here is that important to analyze
   400885:	64 48 33 0c 25 28 00 	xor    rcx,QWORD PTR fs:0x28
   40088c:	00 00 
   40088e:	74 05                	je     400895 <main+0xcb>
