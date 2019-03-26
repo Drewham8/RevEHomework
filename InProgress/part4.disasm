@@ -418,3 +418,6 @@ Disassembly of section .rodata:
   400b80:	65 72 20 70 61 73 73 77 6f 72 64 3a 20 00 49 6e     er password: .In
   400b90:	74 72 75 64 65 72 20 64 65 74 65 63 74 65 64 21     truder detected!
   400ba0:	00 57 65 6c 63 6f 6d 65 20 62 61 63 6b 21 00        .Welcome back!.
+
+part4:     file format elf64-x86-64
+
