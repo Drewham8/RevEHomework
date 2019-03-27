@@ -274,29 +274,29 @@ Disassembly of section .text:
 000000000040093e <main>:
   40093e:	55                   	push   rbp
   40093f:	48 89 e5             	mov    rbp,rsp
-  400942:	48 81 ec 40 04 00 00 	sub    rsp,0x440
-  400949:	89 bd cc fb ff ff    	mov    DWORD PTR [rbp-0x434],edi
+  400942:	48 81 ec 40 04 00 00 	sub    rsp,0x440                        ;sets up a ton of memory
+  400949:	89 bd cc fb ff ff    	mov    DWORD PTR [rbp-0x434],edi        ;
   40094f:	48 89 b5 c0 fb ff ff 	mov    QWORD PTR [rbp-0x440],rsi
   400956:	64 48 8b 04 25 28 00 	mov    rax,QWORD PTR fs:0x28
   40095d:	00 00 
   40095f:	48 89 45 f8          	mov    QWORD PTR [rbp-0x8],rax
-  400963:	31 c0                	xor    eax,eax
-  400965:	bf 2d 0b 40 00       	mov    edi,0x400b2d
-  40096a:	e8 e1 fc ff ff       	call   400650 <getenv@plt>
-  40096f:	48 89 85 d0 fb ff ff 	mov    QWORD PTR [rbp-0x430],rax
-  400976:	48 83 bd d0 fb ff ff 	cmp    QWORD PTR [rbp-0x430],0x0
+  400963:	31 c0                	xor    eax,eax                          ;clears eax
+  400965:	bf 2d 0b 40 00       	mov    edi,0x400b2d                     ;"PART4_TOKEN"
+  40096a:	e8 e1 fc ff ff       	call   400650 <getenv@plt>              ;finds what is stored in the environment variable "PART4_TOKEN"
+  40096f:	48 89 85 d0 fb ff ff 	mov    QWORD PTR [rbp-0x430],rax        ;environ variable -> rbp-430
+  400976:	48 83 bd d0 fb ff ff 	cmp    QWORD PTR [rbp-0x430],0x0        ;checks if 0
   40097d:	00 
   40097e:	75 14                	jne    400994 <main+0x56>
-  400980:	bf 39 0b 40 00       	mov    edi,0x400b39
-  400985:	e8 e6 fc ff ff       	call   400670 <puts@plt>
-  40098a:	bf 01 00 00 00       	mov    edi,0x1
-  40098f:	e8 6c fd ff ff       	call   400700 <exit@plt>
-  400994:	bf 4d 0b 40 00       	mov    edi,0x400b4d
+  400980:	bf 39 0b 40 00       	mov    edi,0x400b39                     ;"Missing credential!"
+  400985:	e8 e6 fc ff ff       	call   400670 <puts@plt>                
+  40098a:	bf 01 00 00 00       	mov    edi,0x1                          
+  40098f:	e8 6c fd ff ff       	call   400700 <exit@plt>                ;exits
+  400994:	bf 4d 0b 40 00       	mov    edi,0x400b4d                     ;"USER"
   400999:	e8 b2 fc ff ff       	call   400650 <getenv@plt>
-  40099e:	48 89 85 e8 fb ff ff 	mov    QWORD PTR [rbp-0x418],rax
-  4009a5:	48 8d 85 e0 fb ff ff 	lea    rax,[rbp-0x420]
-  4009ac:	48 89 c7             	mov    rdi,rax
-  4009af:	e8 62 fe ff ff       	call   400816 <update_hash>
+  40099e:	48 89 85 e8 fb ff ff 	mov    QWORD PTR [rbp-0x418],rax        ;stores USER -> rbp-0x418
+  4009a5:	48 8d 85 e0 fb ff ff 	lea    rax,[rbp-0x420]                  
+  4009ac:	48 89 c7             	mov    rdi,rax                          ;loads garbage into rdi
+  4009af:	e8 62 fe ff ff       	call   400816 <update_hash>             ;
   4009b4:	8b 95 e0 fb ff ff    	mov    edx,DWORD PTR [rbp-0x420]
   4009ba:	48 8d 85 f0 fb ff ff 	lea    rax,[rbp-0x410]
   4009c1:	89 d1                	mov    ecx,edx
