@@ -1,0 +1,33 @@
+iptables -A FORWARD -i enp4s2 -o vmbr0 -j ACCEPT
+iptables -A FORWARD -i vmbr0 -o enp4s2 -j ACCEPT
+iptables -t nat -A PREROUTING -i enp4s2 -j DNAT -d 128.8.37.118 --to-destination 172.20.0.2
+iptables -t nat -A POSTROUTING -o enp4s2 -j SNAT -s 172.20.0.2 --to-source 128.8.37.118
+
+whitelist:
+1. iptables -A OUTPUT --source 172.20.0.2 --destination 129.2.0.0/16 --in-interface vmbr0 --out-interface enp4s2 -j ACCEPT
+2. iptables -A INPUT --source 0.0.0.0/0 --destination 0.0.0.0/0 --in-interface enp4s1 -j ACCEPT
+3. iptables -A OUTPUT --source 0.0.0.0/0 --destination 0.0.0.0/0 --out-interface enp4s1 -j ACCEPT
+
+1 container -> 129.2.0.0/16
+2 enp4s1 -> proxmox host
+
+iptables -P FORWARD DROP
+
+More Rules:
+UDP_____________________________
+1. iptables -A OUTPUT -p udp -s 172.20.0.2 -m limit --out-interface enp4s2 --limit 1/minute --limit-burst 100 -j ACCEPT
+2. iptables -A INPUT -p udp -d 172.20.0.2 --in-interface vmbr0 -j ACCEPT
+3. iptables -A FORWARD -p udp --destination-port 8888 -j DROP
+
+1. container => 1 UDP/min => enp4s2
+2. internet => allow => container
+3. block port 8888
+TCP_____________________________
+1. BlockAll except -m state --state ESTABLISHED,RELATED
+2. container => 1 TCP/min => internet
+3. internet => 5 TCP/min => container
+4. block port 8888
+ICMP____________________________
+1. container => 5/min => internet
+2. internet => 5/min => container
+
