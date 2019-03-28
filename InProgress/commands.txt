@@ -23,11 +23,19 @@ UDP_____________________________
 2. internet => allow => container
 3. block port 8888
 TCP_____________________________
+1. iptables -A FORWARD -p tcp -m state --state ESTABLISHED,RELATED -j ACCEPT
+2. iptables -A OUTPUT -p tcp -s 172.20.0.2 -m limit --out-interface enp4s2 --limit 1/minute -j ACCEPT
+3. iptables -A INPUT -p tcp -d 172.20.0.2 -m limit --in-interface vmbr0 --limit 5/minute -j ACCEPT
+4. iptables -A FORWARD -p tcp --destination-port 8888 -j DROP
+
 1. BlockAll except -m state --state ESTABLISHED,RELATED
 2. container => 1 TCP/min => internet
 3. internet => 5 TCP/min => container
 4. block port 8888
 ICMP____________________________
+1. iptables -A INPUT -p icmp -d 172.20.0.2 -m limit --in-interface vmbr0 --limit 5/minute -j ACCEPT 
+2. iptables -A OUTPUT -p icmp -s 172.20.0.2 -m limit --out-interface enp4s2 --limit 5/minute -j ACCEPT
+
 1. container => 5/min => internet
 2. internet => 5/min => container
 
