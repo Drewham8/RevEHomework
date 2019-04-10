@@ -1,0 +1,2 @@
+LOAD="Hello"
+echo $LOAD
